@@ -1,0 +1,8 @@
+{
+  "name": "permalink",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:zengfenfei/permalink.git",
+  "author": "Kevin Zeng <zengfenfei@gmail.com>",
+  "license": "MIT"
+}
