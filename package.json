@@ -1,7 +1,9 @@
 {
   "name": "permalink",
   "version": "1.0.0",
-  "main": "index.js",
+  "scripts": {
+    "build": "parcel build src/rc-media.html -d docs --public-url ./"
+  },
   "repository": "git@github.com:zengfenfei/permalink.git",
   "author": "Kevin Zeng <zengfenfei@gmail.com>",
   "license": "MIT"
