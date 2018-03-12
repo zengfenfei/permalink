@@ -21,7 +21,7 @@ functions:
     # The `events` block defines how to trigger the handler.helloWorld code
     events:
       - http:
-          path: /proxy/{mediaUrl}
+          path: /proxy/{rcUrl}
           method: get
           cors: true
   encodeUrl:
@@ -29,5 +29,5 @@ functions:
     description: Encode the original media url
     events:
       - http:
-          path: /encode/{mediaUrl}
+          path: /encode/{rcUrl}
           method: get
