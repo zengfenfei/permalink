@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "outDir": "./build",
+        "target": "es5",
+        "allowJs": true,
+        "lib": [
+            "es6",
+            "dom"
+        ],
+        "pretty": true,
+        "noImplicitThis": true,
+        "alwaysStrict": true,
+        "noUnusedLocals": true,
+        "importHelpers": true,
+        "allowSyntheticDefaultImports": true
+    },
+    "files": [
+        "src/lambda/proxy.js",
+        "src/lambda/encode.js"
+    ],
+    "compileOnSave": true
+}
