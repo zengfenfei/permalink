@@ -1,6 +1,7 @@
 .cache/
 dist/
 build/
+data/
 
 # package directories
 node_modules
