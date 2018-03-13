@@ -17,15 +17,15 @@ provider:
 # The `functions` block defines what code to deploy
 functions:
   mediaProxy:
-    handler: build/proxy.get
+    handler: build/lambda/proxy.get
     # The `events` block defines how to trigger the handler.helloWorld code
     events:
       - http:
-          path: /proxy/{rcUrl}
+          path: /proxy/{encryptedUrl}
           method: get
           cors: true
   encodeUrl:
-    handler: build/encode.get
+    handler: build/lambda/encode.get
     description: Encode the original media url
     events:
       - http:

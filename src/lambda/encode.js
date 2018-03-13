@@ -1,13 +1,11 @@
-import * as crypto from 'crypto'
+import { encrypt } from '../crypto'
 
 export function get(event, context, callback) {
-    let cryptKey = Buffer.from(process.env['urlCryptKey'])
+    let cryptKey = process.env['urlCryptKey']
     let rcUrl = decodeURIComponent(event.pathParameters['rcUrl']);
-    let cipher = crypto.createCipher('AES-256-ECB', cryptKey)
-    let encrypted = cipher.update(Buffer.from(rcUrl))
-    encrypted = Buffer.concat([encrypted, cipher.final()])
+    let encoded = encrypt(rcUrl, cryptKey)
     callback(null, {
         statusCode: 200,
-        body: JSON.stringify({ permaLink: encrypted.toString('base64'), error: null, message: 'ok' })
+        body: JSON.stringify({ encoded, error: null, message: 'ok' })
     })
 }

@@ -1,28 +1,29 @@
 import * as https from 'https'
+import { decrypt } from '../crypto'
 
 export function get(event, context, callback) {
-    console.log('>>event', JSON.stringify(event));
-    console.log('>>context', JSON.stringify(context))
-    console.log('Before callback')
-    https.get('https://www.google.com.hk/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png', (res) => {
-        let imgData = Buffer.alloc(0);
-        res.on('data', buf => {
-            imgData = Buffer.concat([imgData, buf])
-        });
-        res.on('end', () => {
-            callback(null, {
-                statusCode: 200,
-                headers: {
-                    'Content-Type': 'image/png',
-                    version: 9
-                },
-                body: imgData.toString('base64'), // base64
-                isBase64Encoded: true
-            });
-            console.log('After callback5', imgData.length);
-        });
+    let cryptKey = process.env['urlCryptKey']
+    let encryptedUrl = decodeURIComponent(event.pathParameters['encryptedUrl'])
 
-    });
+    let rcUrl;
+    try {
+        rcUrl = decrypt(encryptedUrl, cryptKey)
+    } catch (e) {
+        console.warn('Fail to decrypt url', e)
+        callback(null, {
+            statusCode: 400,
+            body: JSON.stringify({ message: 'Fail to decode your url.', error: 'BadUrl' })
+        })
+        return
+    }
 
+
+    let encryptedToken = '';
+
+    // 1. Check access token in cookie
+    callback(null, {
+        statusCode: 200,
+        body: JSON.stringify({ rcUrl, event, context })
+    })
 
 }
