@@ -6,5 +6,10 @@
   },
   "repository": "git@github.com:zengfenfei/permalink.git",
   "author": "Kevin Zeng <zengfenfei@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "cookie": "^0.3.1",
+    "ringcentral-ts": "^0.9.1",
+    "tslib": "^1.9.0"
+  }
 }

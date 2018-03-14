@@ -12,7 +12,6 @@ provider:
   name: aws
   runtime: nodejs6.10
   environment:
-    urlCryptKey: ${file(./data/config.yml):urlCryptKey}
 
 # The `functions` block defines what code to deploy
 functions:
@@ -30,4 +29,10 @@ functions:
     events:
       - http:
           path: /encode/{rcUrl}
+          method: get
+  oauthCallback:
+    handler: build/lambda/oauth-callback.get
+    events:
+      - http:
+          path: /rc-oauth/callback/
           method: get

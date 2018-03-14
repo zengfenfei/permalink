@@ -16,7 +16,8 @@
     },
     "files": [
         "src/lambda/proxy.js",
-        "src/lambda/encode.js"
+        "src/lambda/encode.js",
+        "src/lambda/oauth-callback.js"
     ],
     "compileOnSave": true
 }
