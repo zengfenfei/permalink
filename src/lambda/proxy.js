@@ -43,9 +43,16 @@ export async function get(event, context, callback) {
     token.appKey = rc.appKey
     rc.tokenStore.save(token)   // FIXME Improve TS
     let res = await rc.get(rcUrl)
+    let rcHeaders = res.headers;
+    let data = await res.buffer()
     callback(null, {
         statusCode: 200,
-        body: JSON.stringify(await res.text())
+        headers: {
+            'Content-Type': rcHeaders.get('content-type'),
+            'Content-Disposition': rcHeaders.get('content-disposition')
+        },
+        body: data.toString('base64'),
+        isBase64Encoded: true
     })
 
 }
