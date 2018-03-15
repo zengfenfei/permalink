@@ -33,15 +33,11 @@ export async function get(event, context, callback) {
         })
         return
     }
+    rc.setToken({ access_token: decrypt(encryptedToken) })
     let prefixMatch = rcUrl.match(/^\/restapi\/[^\/]*(.*)$/)
     if (prefixMatch) {
         rcUrl = prefixMatch[1]
     }
-    let token = new Token();
-    token.accessToken = decrypt(encryptedToken)
-    token.type = 'bearer'
-    token.appKey = rc.appKey
-    rc.tokenStore.save(token)   // FIXME Improve TS
     let res
     try {
         res = await rc.get(rcUrl)

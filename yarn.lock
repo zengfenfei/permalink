@@ -4,11 +4,11 @@
 
 "@types/node@^7.0.5":
   version "7.0.56"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-7.0.56.tgz#b6b659049191822be43c14610c1785d4b9cddecf"
+  resolved "http://registry.npmjs.org/@types/node/-/node-7.0.56.tgz#b6b659049191822be43c14610c1785d4b9cddecf"
 
 "@types/node@^8.0.20":
   version "8.9.5"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.9.5.tgz#162b864bc70be077e6db212b322754917929e976"
+  resolved "http://registry.npmjs.org/@types/node/-/node-8.9.5.tgz#162b864bc70be077e6db212b322754917929e976"
 
 agent-base@2, agent-base@^2.1.1:
   version "2.1.1"
@@ -429,9 +429,9 @@ readable-stream@2, readable-stream@^2.0.5:
     string_decoder "~1.0.3"
     util-deprecate "~1.0.1"
 
-ringcentral-ts@^0.9.1:
-  version "0.9.1"
-  resolved "https://registry.yarnpkg.com/ringcentral-ts/-/ringcentral-ts-0.9.1.tgz#4eb28204f0934fd22c423ff8dd1ed5098ee120eb"
+ringcentral-ts@1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/ringcentral-ts/-/ringcentral-ts-1.0.4.tgz#cbbda50f92d7a1511b5a91b6ada09e63212da7e4"
   dependencies:
     "@types/node" "^8.0.20"
     delay.ts "^1.1.0"
