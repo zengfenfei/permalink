@@ -24,7 +24,7 @@ export async function get(event, context, callback) {
                     encrypt(token.accessToken),
                     { path: '/', expires: new Date(token.expiresIn), httpOnly: true }
                 ),
-                Location: config.rcProxyEndpoint + encodeURIComponent(state)
+                Location: config.proxyBaseUrl + encodeURIComponent(state)
             }
         })
     } else {
