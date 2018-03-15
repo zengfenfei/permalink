@@ -11,8 +11,8 @@ let rc = new RingCentral({
 
 export default rc
 
-export function createAuthUrl(state, brand_id) {
-    return rc.oauthUrl(rcApp.redirectUri, { state, brand_id })
+export function createAuthUrl(opts) {
+    return rc.oauthUrl(rcApp.redirectUri, opts)
 }
 
 export async function getTokenByCode(code) {

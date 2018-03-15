@@ -28,7 +28,7 @@ export async function get(event, context, callback) {
         callback(null, {
             statusCode: 302,
             headers: {
-                Location: createAuthUrl(encryptedUrl, brand)
+                Location: createAuthUrl({ state: encryptedUrl, brand_id: brand })
             }
         })
         return
@@ -42,7 +42,26 @@ export async function get(event, context, callback) {
     token.type = 'bearer'
     token.appKey = rc.appKey
     rc.tokenStore.save(token)   // FIXME Improve TS
-    let res = await rc.get(rcUrl)
+    let res
+    try {
+        res = await rc.get(rcUrl)
+    } catch (e) {
+        res = e.rawRes
+        callback(null, {
+            statusCode: res.status,
+            headers: {
+                'Content-Type': 'text/html'
+            },
+            body: `Error occurs: ${e.message} 
+            <p>You may try to 
+                <strong><a href='${createAuthUrl({ state: encryptedUrl, brand_id: brand, force: true })}' title='Log into RingCentral'>
+                login again
+                </a></strong>.
+            </p>`,
+        })
+        return
+    }
+
     let rcHeaders = res.headers;
     let data = await res.buffer()
     callback(null, {
