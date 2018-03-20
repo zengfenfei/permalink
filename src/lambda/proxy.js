@@ -42,9 +42,9 @@ export async function get(event, context, callback) {
     try {
         res = await rc.get(rcUrl)
     } catch (e) {
-        res = e.rawRes
+        res = e.rawRes || {}
         callback(null, {
-            statusCode: res.status,
+            statusCode: res.status || 403,
             headers: {
                 'Content-Type': 'text/html'
             },
