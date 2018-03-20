@@ -8,6 +8,7 @@
   "author": "Kevin Zeng <zengfenfei@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "assign-deep": "^0.4.7",
     "cookie": "^0.3.1",
     "ringcentral-ts": "1.0.4",
     "tslib": "^1.9.0"
