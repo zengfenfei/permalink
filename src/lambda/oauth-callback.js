@@ -1,11 +1,10 @@
 import * as cookie from 'cookie'
 import { encrypt } from "../crypto";
 import { getTokenByCode } from "../rc";
-import config, { setStage } from '../config'
-import { stat } from 'fs';
+import getConfig from '../config'
 
 export async function get(event, context, callback) {
-    setStage(event.requestContext.stage)
+    const config = getConfig(event.requestContext.stage)
 
     let { queryStringParameters } = event
     if (!queryStringParameters) {
@@ -40,7 +39,7 @@ export async function get(event, context, callback) {
         headers: {
             'Set-Cookie': cookie.serialize(
                 'rc-token',
-                encrypt(token.accessToken),
+                encrypt(token.accessToken, config.urlCryptKey),
                 { path: '/', expires: new Date(token.expiresIn), httpOnly: true }
             ),
             Location: config.proxyBaseUrl + encodeURIComponent(state)

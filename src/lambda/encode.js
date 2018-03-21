@@ -1,6 +1,6 @@
 import * as url from 'url'
 import { encrypt } from '../crypto'
-import getConfig from '../config'
+import { getStageConfig } from '../config'
 
 export function get(event, context, callback) {
     let rcUrl = decodeURIComponent(event.pathParameters['rcUrl']);
@@ -17,7 +17,7 @@ export function get(event, context, callback) {
     if (hostname.match(/\bdevtest\b/)) {
         stage = 'dev'
     }
-    const config = getConfig(stage)
+    const config = getStageConfig(stage)
     let permaLink = config.proxyBaseUrl + encodeURIComponent(encrypt(rcUrl.path, config.urlCryptKey))
     callback(null, {
         statusCode: 200,

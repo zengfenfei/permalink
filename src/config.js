@@ -8,10 +8,26 @@ const configs = {
     dev: assign({}, base, require('../data/config.dev.json'))
 }
 
-export default function getConfig(stage = 'prd') {
-    let config = configs[stage]
+/**
+ * 
+ * @param {string} stage optional, if not specified
+ */
+export function getStageConfig(stage) {
+    const config = configs[stage]
     if (!config) {
         throw new Error('No configuration found for stage ' + stage)
     }
     return config
+}
+
+let currentConfig;  // Will be set only once
+/**
+ * 
+ * @param {string} stage if the cached config exists, the argument will be ignored
+ */
+export default function getCachedConfig(stage) {
+    if (!currentConfig) {
+        currentConfig = getStageConfig(stage)
+    }
+    return currentConfig
 }

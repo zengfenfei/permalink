@@ -2,17 +2,17 @@ import * as cookie from 'cookie'
 import Token from 'ringcentral-ts/Token'
 import { decrypt } from '../crypto'
 import getRc, { createAuthUrl } from "../rc"
-import { setStage } from '../config'
+import getConfig from '../config'
 
 
 export async function get(event, context, callback) {
-    setStage(event.requestContext.stage)
+    const config = getConfig(event.requestContext.stage)
 
     let encryptedUrl = decodeURIComponent(event.pathParameters['encryptedUrl'])
     // 1. Decode the original RC platform url
     let rcUrl
     try {
-        rcUrl = decrypt(encryptedUrl)
+        rcUrl = decrypt(encryptedUrl, config.urlCryptKey)
     } catch (e) {
         console.warn('Fail to decrypt url', e)
         callback(null, {
@@ -36,7 +36,7 @@ export async function get(event, context, callback) {
         return
     }
     let rc = getRc()
-    rc.setToken({ access_token: decrypt(encryptedToken) })
+    rc.setToken({ access_token: decrypt(encryptedToken, config.urlCryptKey) })
     let prefixMatch = rcUrl.match(/^\/restapi\/[^\/]*(.*)$/)
     if (prefixMatch) {
         rcUrl = prefixMatch[1]
