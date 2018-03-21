@@ -1,10 +1,12 @@
 import * as cookie from 'cookie'
 import { encrypt } from "../crypto";
 import { getTokenByCode } from "../rc";
-import config from '../config'
+import config, { setStage } from '../config'
 import { stat } from 'fs';
 
 export async function get(event, context, callback) {
+    setStage(event.requestContext.stage)
+
     let { queryStringParameters } = event
     if (!queryStringParameters) {
         callback(null, {

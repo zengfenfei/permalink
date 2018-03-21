@@ -5,6 +5,9 @@ let config = require('../data/config.json')
 
 // You should call this function only once
 export function setStage(stage) {
+    if (stage === 'prd') {
+        return
+    }
     assign(config, require('../data/config.' + stage + '.json'))
 }
 
