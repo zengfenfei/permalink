@@ -1,6 +1,7 @@
 import * as url from 'url'
 import { encrypt } from '../crypto'
 import { getStageConfig } from '../config'
+import { validateBrand } from "../brand";
 
 export function get(event, context, callback) {
     let rcUrl = decodeURIComponent(event.pathParameters['rcUrl']);
@@ -9,7 +10,7 @@ export function get(event, context, callback) {
     if (!hostname) {
         callback(null, {
             statusCode: 400,
-            body: JSON.stringify({ error: 'Bad url' })
+            body: JSON.stringify({ error: 'Incomplete url' })
         })
         return
     }
@@ -18,7 +19,16 @@ export function get(event, context, callback) {
         stage = 'dev'
     }
     const config = getStageConfig(stage)
-    let permaLink = config.proxyBaseUrl + encodeURIComponent(encrypt(rcUrl.path, config.urlCryptKey))
+    let { brand } = event.queryStringParameters || {}
+    let brandId = validateBrand(brand, config.brands)
+    if (!brandId) {
+        callback(null, {
+            statusCode: 400,
+            body: JSON.stringify({ error: 'Bad brand:' + brand })
+        })
+        return
+    }
+    let permaLink = config.proxyBaseUrl + encodeURIComponent(encrypt(rcUrl.path, config.urlCryptKey)) + '?brand=' + brandId
     callback(null, {
         statusCode: 200,
         body: JSON.stringify({ permaLink, error: null, message: 'ok' })

@@ -3,6 +3,7 @@ import Token from 'ringcentral-ts/Token'
 import { decrypt } from '../crypto'
 import getRc, { createAuthUrl } from "../rc"
 import getConfig from '../config'
+import { validateBrand } from "../brand";
 
 
 export async function get(event, context, callback) {
@@ -22,11 +23,13 @@ export async function get(event, context, callback) {
         return
     }
 
+    let { brand } = event.queryStringParameters || {}
+    brand = validateBrand(brand, config.brands)
+
     // 2. Check access token in cookie
     let cookies = cookie.parse(event.headers.Cookie || '')
     let encryptedToken = cookies['rc-token']
     if (!encryptedToken) {// Redirect RC oauth page
-        let { brand } = event.queryStringParameters || {}
         callback(null, {
             statusCode: 302,
             headers: {
