@@ -28,7 +28,7 @@ export function get(event, context, callback) {
         })
         return
     }
-    let permaLink = config.proxyBaseUrl + encodeURIComponent(encrypt(rcUrl.path, config.urlCryptKey)) + '?brand=' + brandId
+    let permaLink = config.proxyBaseUrl + encrypt(rcUrl.path, config.urlCryptKey) + '?brand=' + brandId
     callback(null, {
         statusCode: 200,
         body: JSON.stringify({ permaLink, error: null, message: 'ok' })

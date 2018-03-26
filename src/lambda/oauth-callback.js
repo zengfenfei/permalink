@@ -22,7 +22,6 @@ export async function get(event, context, callback) {
         })
         return
     }
-    state = state.replace(/\s/g, '+')   // FIXME, a bug of oauth, the '+' in 'state' will become space when they're passed back
     let token
     try {
         token = await getTokenByCode(code)
@@ -42,7 +41,7 @@ export async function get(event, context, callback) {
                 encrypt(token.accessToken, config.urlCryptKey),
                 { path: '/', expires: new Date(token.expiresIn), httpOnly: true }
             ),
-            Location: config.proxyBaseUrl + encodeURIComponent(state)
+            Location: config.proxyBaseUrl + state
         }
     })
 

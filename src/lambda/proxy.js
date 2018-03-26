@@ -1,6 +1,7 @@
+import * as querystring from 'querystring'
 import * as cookie from 'cookie'
 import Token from 'ringcentral-ts/Token'
-import { decrypt } from '../crypto'
+import { decrypt, privateDecrypt, base642URI } from '../crypto'
 import getRc, { createAuthUrl } from "../rc"
 import getConfig from '../config'
 import { validateBrand } from "../brand";
@@ -9,11 +10,17 @@ import { validateBrand } from "../brand";
 export async function get(event, context, callback) {
     const config = getConfig(event.requestContext.stage)
 
+    let { brand, type } = event.queryStringParameters || {}
+
     let encryptedUrl = decodeURIComponent(event.pathParameters['encryptedUrl'])
     // 1. Decode the original RC platform url
     let rcUrl
     try {
-        rcUrl = decrypt(encryptedUrl, config.urlCryptKey)
+        if (type === 'rsa') {
+            rcUrl = privateDecrypt(encryptedUrl, config.privateKey)
+        } else {
+            rcUrl = decrypt(encryptedUrl, config.urlCryptKey)
+        }
     } catch (e) {
         console.warn('Fail to decrypt url', e)
         callback(null, {
@@ -23,17 +30,19 @@ export async function get(event, context, callback) {
         return
     }
 
-    let { brand } = event.queryStringParameters || {}
-    brand = validateBrand(brand, config.brands)
-
     // 2. Check access token in cookie
     let cookies = cookie.parse(event.headers.Cookie || '')
     let encryptedToken = cookies['rc-token']
+    let state = base642URI(encryptedUrl)
+    if (event.queryStringParameters) {
+        state += '?' + querystring.stringify(event.queryStringParameters)
+    }
+    let brand_id = validateBrand(brand, config.brands)
     if (!encryptedToken) {// Redirect RC oauth page
         callback(null, {
             statusCode: 302,
             headers: {
-                Location: createAuthUrl({ state: encryptedUrl, brand_id: brand })
+                Location: createAuthUrl({ state, brand_id })
             }
         })
         return
@@ -56,7 +65,7 @@ export async function get(event, context, callback) {
             },
             body: `Error occurs: ${e.message} 
             <p>You may try to 
-                <strong><a href='${createAuthUrl({ state: encryptedUrl, brand_id: brand, force: true })}' title='Log into RingCentral'>
+                <strong><a href='${createAuthUrl({ state, brand_id, force: true })}' title='Log into RingCentral'>
                 login again
                 </a></strong>.
             </p>`,
